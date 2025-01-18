@@ -1,6 +1,7 @@
 var textArray, textPos = 0, textBox;
 var tvChannels, currChannel, channelPos;
-var channelOn = false;
+var channelOn = false, gameStart = false;
+var currBackgroundColor = "#b00b69";
 
 function setup() {
     createCanvas(700, 700);
@@ -10,6 +11,7 @@ function setup() {
         "Oh...this show. It's not like I have anything better to watch.",
         "Getting sleepy..."
     ];
+    text2 = ["Wait...what?"];
     textBox = new Sprite(width - (width / 2), height - (height / 4), width / 2, height / 4);
     textBox.color = "white";
     textBox.text = textArray[textPos];
@@ -24,10 +26,16 @@ function setup() {
 }
 
 function draw() {
-    background("#b00b69");
-    text("Use the arrow keys to change the channel to Rockola!", width / 3 - 15, 15);
-    text(`Channel: ${currChannel}`, width / 2, height / 2);
+    background(currBackgroundColor);
+    if (!channelOn)
+        text("Use the arrow keys to change the channel to Rockola!", width / 3 - 15, 15);
+    if (currBackgroundColor == "#b00b69")
+        text(`Channel: ${currChannel}`, width / 2, height / 2);
     channelOn = (currChannel == "Rockola") ? true : false;
+    if (gameStart) {
+        currBackgroundColor = "gold";
+        textBox.text = text2[0];
+    }
 }
 
 function keyPressed() {
@@ -54,20 +62,36 @@ function keyPressed() {
 }
 
 function mousePressed() {
+    /*if (textPos >= textArray.length)
+        gameStart = true;*/
     if (channelOn) {
+        cycleText(textArray, textPos);
+    }
+    /*else if (gameStart) {
+        textPos = 0;
+        cycleText(text2, textPos);
+    }*/
+}
+
+function cycleText(array, index) {
+    if (!Array.isArray(array) || typeof(index) != "number") {
+        throw new TypeError();
+    }
+    else {
         try {
-            if(textPos + 1 > textArray.length) {
+            if(index + 1 >= array.length) {
                 throw new RangeError();
             }
-            textBox.text = textArray[++textPos];
+            textBox.text = array[++index];
         }
         catch(RangeError) {
             console.log("No more text to cycle through.");
         }
         finally {
-            if (textPos >= textArray.length) {
-                textBox.text = textArray[textArray.length - 1];
+            if (index >= array.length) {
+                textBox.text = array[array.length - 1];
             }
+            console.log(index);
         }
     }
 }
