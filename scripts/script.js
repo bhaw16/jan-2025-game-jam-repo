@@ -79,7 +79,7 @@ function cycleText(array, index) {
     }
     else {
         try {
-            if(index + 1 >= array.length) {
+            if(index + 1 > array.length) {
                 throw new RangeError();
             }
             textBox.text = array[++index];
