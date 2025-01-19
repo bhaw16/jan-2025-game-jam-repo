@@ -1,9 +1,19 @@
 var textArray, textPos = 0, textBox;
+var text2;
 var tvChannels, currChannel, channelPos;
-var channelOn = false, gameStart = false;
+var channelOn = false, gameStart = false, drumGame = false;
 var currBackgroundColor = "#b00b69";
+var drums, marker, drumMarker;
+var kickSound;
+
+function preload() {
+    marker = loadImage("assets/images/beamed-16th-notes.png");
+    soundFormats("wav");
+    kickSound = loadSound("assets/sound/acoustic-drum-kick.wav");
+}
 
 function setup() {
+    marker.resize(50, 50);
     createCanvas(700, 700);
     allSprites.rotationLock = true;
     textArray = [
@@ -29,6 +39,8 @@ function setup() {
     } while (currChannel == "Rockola");
     channelPos = tvChannels.indexOf(currChannel);
     console.log(tvChannels);
+    drumMarker = new Sprite(marker, -983, -172, marker.width, marker.height);
+    createDrums();
 }
 
 function draw() {
@@ -41,6 +53,21 @@ function draw() {
     if (gameStart) {
         currBackgroundColor = "gold";
         textBox.text = text2[textPos];
+    }
+    if (drumGame) {
+        currBackgroundColor = "blue";
+        textBox.pos = {x: -700, y: -700};
+        showDrums();
+    }
+    for (var i = 0; i < drums.length; i++) {
+        if (drums[i].sprite.mouse.released()) {
+            drums[i].play();
+            console.log("play");
+        }
+        else {
+            drums[i].stop();
+            console.log("no play");
+        }
     }
 }
 
@@ -75,8 +102,11 @@ function mousePressed() {
             textPos = 0;
         }
     }
-    else if (gameStart) {
+    else if (gameStart && !drumGame) {
         cycleText(text2);
+        if (textPos >= text2.length) {
+            drumGame = true;
+        }
     }
 }
 
@@ -97,4 +127,48 @@ function cycleText(array) {
             textBox.text = array[array.length - 1];
         }
     }
+}
+
+function createDrums() {
+    drums = [
+        new Drum(   //ride cymbal
+            new Sprite(-800, -800, 150),
+            "gold"
+        ),
+        new Drum(   //hi-hat cymbal
+            new Sprite(-900, -900, 130),
+            "gold"
+        ),
+        new Drum(   //crash cymbal
+            new Sprite(-134, -134, 130),
+            "gold"
+        ),
+        new Drum(   //floor tom
+            new Sprite(-1000, -1000, 140),
+            "white"
+        ),
+        new Drum(   //kick drum
+            new Sprite(-1100, -1100, 195, 115),
+            //kickSound,
+            "gray"
+        ),
+        new Drum(   //snare drum
+            new Sprite(-1200, -100, 110),
+            "white"
+        ),
+        new Drum(   //tom drum 1
+            new Sprite(-900, -100, 120),
+            "white"
+        ),
+        new Drum(   //tom drum 2
+            new Sprite(-900, -200, 120),
+            "white"
+        )
+    ];
+}
+
+function showDrums() {
+    drums[4].sprite.pos = {x: width / 2, y: height / 2};
+    drums[3].sprite.pos = {x: drums[4].sprite.w + 15, y: drums[4].sprite.y + drums[4].sprite.radius - 20};
+    drums[3].sprite.layer = drums[4].sprite.layer + 1;
 }
