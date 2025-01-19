@@ -133,15 +133,15 @@ function createDrums() {
     drums = [
         new Drum(   //ride cymbal
             new Sprite(-800, -800, 150),
-            "gold"
+            "#C69E44"
         ),
         new Drum(   //hi-hat cymbal
             new Sprite(-900, -900, 130),
-            "gold"
+            "#C69E44"
         ),
         new Drum(   //crash cymbal
             new Sprite(-134, -134, 130),
-            "gold"
+            "#C69E44"
         ),
         new Drum(   //floor tom
             new Sprite(-1000, -1000, 140),
@@ -169,6 +169,13 @@ function createDrums() {
 
 function showDrums() {
     drums[4].sprite.pos = {x: width / 2, y: height / 2};
-    drums[3].sprite.pos = {x: drums[4].sprite.w + 15, y: drums[4].sprite.y + drums[4].sprite.radius - 20};
-    drums[3].sprite.layer = drums[4].sprite.layer + 1;
+    drums[3].sprite.pos = {x: drums[4].sprite.x + drums[4].sprite.w - 55, y: drums[4].sprite.y + (drums[4].sprite.h / 2) - 20};
+    drums[7].sprite.layer = drums[6].sprite.layer = drums[5].sprite.layer = drums[3].sprite.layer = drums[4].sprite.layer + 1;
+    drums[5].sprite.pos = {x: drums[4].sprite.x - (drums[4].sprite.w / 2)- 15, y: drums[3].sprite.y};
+    drums[6].sprite.pos = {x: drums[4].sprite.x - (drums[4].sprite.w / 2) + 35, y: drums[3].sprite.y - drums[3].sprite.h + 20};
+    drums[7].sprite.pos = {x: drums[6].sprite.x + drums[6].sprite.d, y: drums[6].sprite.y};
+    drums[2].sprite.layer = drums[1].sprite.layer = drums[0].sprite.layer = drums[7].sprite.layer + 1;
+    drums[0].sprite.pos = {x: drums[7].sprite.x + drums[7].sprite.radius + 70, y: drums[7].sprite.y};
+    drums[1].sprite.pos = {x: drums[5].sprite.x - drums[5].sprite.d - 22.5, y: drums[5].sprite.y - 20};
+    drums[2].sprite.pos = {x: drums[6].sprite.x - drums[6].sprite.d + 25, y: drums[6].sprite.y - 15};
 }
